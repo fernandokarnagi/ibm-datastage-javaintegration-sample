@@ -1,0 +1,597 @@
+<!--!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" type="text/css">
+<style type="text/css">
+pre {
+   background-color: efefef;
+}
+</style>
+<title>Getting Started with Java Integration Stage API Samples</title>
+<!-- All rights reserved. Licensed Materials Property of IBM -->
+<!-- US Government Users Restricted Rights -->
+<!-- Use, duplication or disclosure restricted by -->
+<!-- GSA ADP Schedule Contract with IBM Corp. -->
+</head>
+
+<body>
+
+<h1>Getting Started with Java Integration Stage API Samples</h1>
+<p>
+This document describes end-to-end scenarios using Java Integration stage with sample jobs and Java code
+ on <span>IBM<sup>®</sup> Information Server<sup>®</sup> DataStage<sup>®</sup></span>. 
+</p>
+<p>
+The Java Integration stage API Samples consists of the following directory layout:
+
+<pre>
+  samples
+   +--- LICENSE, build.xml, Sample.dsx
+   +--- lib  // contains Java Integration stage API jar
+   +--- docs // contains documentation - SampleGettingStarted.html
+   |      |
+   |      +--- images  // images for html documentation
+   |      
+   +--- javadoc // sample code javadoc (will be created when building samples)
+   +--- src  // contains sample Java code
+   +--- data // contains input data file used in sample jobs
+</pre>
+</p>
+
+
+<h2>Preparing Java Sample Code</h2>
+
+<h3>Before you begin</h3>
+Prepare the environment with following installation:
+
+<ul type="disc">
+   <li>Apache Ant 1.6.5 or higher with Java 6 JDK</li>
+</ul>
+
+<p style="padding-left:2em">
+If you are compiling Java sample code on domain tier, Java 6 JDK is installed with <span>IBM<sup>®</sup> WebSphere<sup>®</sup> Application Server</span>:<br>
+e.g. <i>/opt/IBM/WebSphere/AppServer/java</i><br>
+</p>
+<p style="padding-left:2em">
+For Apache Ant installation, please refer to <a href="http://ant.apache.org/manual/install.html">Installing Apache Ant</a>.
+</p>
+
+<h3>Compile Java Sample Code</h3>
+
+<ol type="1">
+   <li>Copy JavaIntegration_Samples.zip from <i>&ltISDIR&gt/Clients/Samples/Connectors/</i> directory</li>
+   <li>Unzip JavaIntegration_Samples.zip</li>
+   <li>Compile Java sample code and create jar file to deploy</li>
+      <ul type="disc">
+         <li>Change directory to unzipped <i>samples</i> directory</li>
+         <li>Execute <b><i>ant clean build</i></b></li>
+         <i>Samples.jar</i> will be created in <i>samples/jars</i> directory.<br>
+      </ul>
+</ol>
+
+<h2>Deploying Java Sample Code</h2>
+<p style="padding-left:2em">
+Copy <i>samples/jars/Samples.jar</i> to somewhere on engine tier.
+</p>
+
+<h2>Copying input data files used in the sample jobs</h2>
+<p style="padding-left:2em">
+Copy <i>samples/data</i> directory to somewhere on engine tier.
+</p>
+
+<h2>Importing Java Integration Stage Samples</h2>
+
+<ol type="1">
+   <li>Copy <i>samples/Sample.dsx</i> to client tier.</li>
+   <li>From client tier, launch DataStage Designer.</li>
+   <li>Import job from designer.</li>
+<p>
+Designer menu -> Import -> DataStage Components<br>
+</p>
+<img src="images/DesignerImport.PNG"><br>
+<p>
+Select copied <i>Sample.dsx</i> and import jobs.<br>
+</p>
+<img src="images/DesignerRepositoryImport.PNG"><br>
+<p>
+You should see 6 jobs and 1 parameter set in repository.<br>
+</p>
+<img src="images/Repository.PNG"><br>
+
+<p>
+You cannot import the <i>Sample.dsx</i> file from a non-English client tier as it is.
+To import the <i>Sample.dsx</i> file from a non-English client tier,
+you need to copy the file, open it in a text editor and edit it.<br>
+For example, to import the <i>Sample.dsx</i> file on Japanese Windows machine, 
+you need to use the following steps:
+<ol>
+<li>Copy the <i>Sample.dsx</i> file and open the file in a text editor.</li>
+<li>In  the CharacterSet="CP1252" line, set  your client code page as "CP932".<br>
+<i>(Note: Japanese client code page is CP932.)</i></li>
+<li>Save and close the file.</li>
+</ol>
+</p>
+</ol>
+
+<h2>Job Description</h2>
+
+<h3>Sample Jobs<h3>
+
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<FONT SIZE="+1">
+<TD WIDTH="15%"><B>Job name</B></TD><TD><B>Description</B></TD><TD><B>Java code name</B></TD></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A href="#JavaPackTransformer">JavaPackTransformer</A></B></TD>
+<TD>JavaPackTransformer is a sample job for JavaPack compatibility.<br>
+It reads a row having empno(Integer), firstname(VarChar), lastname(VarChar), hireDate(Date), 
+edLevel(SmallInt), salary(Double), bonus(Double) and lastUpdate(Time) columns, converts the 
+firstname and lastname value to uppercase. <br>
+If firstname column of the input row contains the character '*', the row is rejected. 
+</TD>
+<TD><FONT SIZE="-1"><code>com.ibm.is.cc.javastage.samples.JavaPackTransformer</code></FONT></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A href="#Transformer">Transformer</A></B></TD>
+<TD>Transformer is a sample job for column-based transformer stage.<br>
+It reads a row having empno(Integer), firstname(VarChar), lastname(VarChar), hireDate(Date), 
+edLevel(SmallInt), salary(Double), bonus(Double) and lastUpdate(Time) columns, converts the firstname
+ and lastname value to uppercase.<br>
+If firstname column of the input row contains the character '*', the row is rejected. 
+In rejected records,"ERRORTEXT" and "ERRORCODE" fields are added to show the rejected reason.
+</TD>
+<TD><FONT SIZE="-1"><code>com.ibm.is.cc.javastage.samples.Transformer</code></FONT></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A href="#JavaBeansTransformer">JavaBeansTransformer</A></B></TD>
+<TD>JavaBeansTransformer is a sample job for bean-based transformer stage.<br>
+It reads a row having empno(Integer), firstname(VarChar), lastname(VarChar), hireDate(Date), 
+edLevel(SmallInt), salary(Double), bonus(Double) and lastUpdate(Time) columns, converts the firstname
+ and lastname value to uppercase.<br>
+If firstname column of the input row contains the character '*', the row is rejected. 
+In rejected records,"ERRORTEXT" and "ERRORCODE" fields are added to show the rejected reason.
+</TD>
+<TD><FONT SIZE="-1"><code>com.ibm.is.cc.javastage.samples.JavaBeansTransformer</code></FONT></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A href="#IntValueGenerator">IntValueGenerator</A></B></TD>
+<TD>IntValueGenerator is a sample job for column-based source stage. <br>
+The job has 1 Integer column.
+It writes rows to an output link. The number of rows to generate is specified as the user's custom stage property "NumOfRecords" value in the Java Integration stage and is fetched using the Configuration.getUserProperties() method. 
+Default value is 10.
+<br>
+End-of-wave marker is written based on the user's custom output link property "WaveCount".
+Based on the specified value, end-of-wave marker is written after specified number
+of records. 
+Default value is 5.
+<br>
+Generated value for Integer columns are the incremented integer value starts from 0.
+If the job is running on multi-node environment, generation is distributed across
+player nodes in round-robin method.
+For example, if job is running on 3 nodes and "NumOfRecords" is set to 10, records
+are generated as follows:
+<br>
+<ul type="circle">
+   <li>node 0 - 0, 3, 6, 9</li>
+   <li>node 1 - 1, 4, 7</li>
+   <li>node 2 - 2, 5, 8</li>
+</ul>
+</TD>
+<TD><FONT SIZE="-1"><code>com.ibm.is.cc.javastage.samples.IntValueGenerator</code></FONT></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A href="#RCP">RCP</A></B></TD>
+<TD>RCP is a sample job for column-based transformer stage using Runtime Column Propagation (RCP). <br>
+It reads a row having empno(Integer), firstname(VarChar), lastname(VarChar), hireDate(Date), edLevel(SmallInt),
+ salary(Double), bonus(Double) and lastUpdate(Time[microseconds])columns, converts the firstname and lastname
+  value to uppercase.<br>
+There is only "firstname" and "lastname" column defined in the output link (Runtime column propagation check box is checked). 
+<br>
+If RCP is on, all columns in input link will be propagated to output link. Columns other than "firstname" and "lastname" is sent to output link without any changes. 
+<br>
+If RCP is off, only "firstname" and "lastname" will be sent to output link.
+</TD>
+<TD><FONT SIZE="-1"><code>com.ibm.is.cc.javastage.samples.RCP</code></FONT></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A href="#UDF">UserDefinedFunction</A></B></TD>
+<TD> UserDefinedFunction is a sample job to invoke User-Defined Function (UDF).<br>
+UDF has double and input bean arguments to return output bean.
+</TD>
+<TD><FONT SIZE="-1"><code>com.ibm.is.cc.javastage.samples.UserDefinedFunction</code></FONT></TD>
+</TR>
+</TABLE>
+
+<h3>Parameter Set<h3>
+
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<FONT SIZE="+1">
+<TD WIDTH="15%"><B>Parameter set name</B></TD><TD><B>Description</B></TD><TD><B>Prameters</B></TD></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A href="#ParameterSet">JavaIntegrationSamples</A></B></TD>
+<TD>JavaIntegrationSamples is Parameter Set contains the parameters used in the sample jobs described in above table.
+</TD>
+<TD>
+<b>usercp</b> - Parameter for User Classpath</li><br>
+<b>inputfile</b> - Parameter for input data file path</li>
+
+</TD>
+</TR>
+</TABLE>
+
+<h2>Modifying Parameter Set</h2>
+<p>
+You will have to modify the parameters used in the jobs to match your environment.<br>
+
+<ol type="1">
+   <li>Double click on <b><a name="ParameterSet">JavaIntegrationSamples</a></b> parameter set in the repository.</li>
+   </p>
+   <img src="images/ParameterSetRepository.PNG"><br>
+   <p>
+   It has two parameters, <b>usercp</b> and <b>inputfile</b>.<br>
+   </p>
+   <img src="images/ParameterSetParameters.PNG"><br>
+   <p>
+   <b>usercp</b> is the parameter used in the <b>Classpath</b> property of the Java Integration stage.<br>
+   </p>
+   <img src="images/Classpath.PNG"><br>
+   <p>
+   <b>inputfile</b> is the parameter used in the <b>File</b> property of the Sequential File Stage.<br>
+   </p>
+   <img src="images/Filepath.PNG"><br>
+   <li>Change parameter set values to appropriate value where you have placed <i>Sample.jar</i> and <i>sample/data</i> directory on engine tier.</li>
+   <p>
+   </p>
+   <img src="images/ParameterSetValues.PNG"><br>
+</ol>
+
+<h2>Validating Modified Parameter Set Values</h2>
+
+<p>
+In order to check the validness of the parameter values, you can verify from the imported job.<br>
+Here is the example:
+</p>
+
+<ol type="1">
+   <li>Open <b>JavaPackTransformer</b> job by double-clicking the job in the repository.</li>
+
+   <li>Double click on Sequential Stage icon which name is <b>emplyee</b>.<br></li>
+   <p>
+   The <b>File</b> property value is the <b>inputfile</b> parameter defefined in the <a href="#ParameterSet">JavaIntegrationSamples</a> parameter set configured in previous step.
+   In order to check if the parameter value is a valid file path, click on <b>View Data...</b> button and check the contents of the input data file.
+   </p>
+   <img src="images/ViewDataButton.PNG"><br>
+   <p>
+   <b>Resolve Job Parameter</b> dialog will be launched, and shows the default value for <b>inputfile</b> parameter defined in <a href="#ParameterSet">JavaIntegrationSamples</a> Parameter Set.
+   If the default value does not need to be changed, click on "OK". If not, change the value and click on "OK".
+   </p>
+   <img src="images/ViewDataParameter.PNG"><br>
+   <p>
+   Click on "OK" button for <b>Data Browser</b> dialog.<br>
+   </p>
+   <img src="images/ViewDataRows.PNG"><br>
+   <p>
+   You should see the contents of the input data file (<i>data/employee.txt</i>) if the file path is configured correctly.<br>
+   </p>
+   <img src="images/ViewDataDataBrowser.PNG"><br>
+
+   <li>Double click on Java Integration stage icon which name is <b>JavaPackTransformer</b>.<br></li>
+   <p>
+   Java Integration stage has following parameter defined:
+   </p>
+   <img src="images/JavaStageProperty.PNG"><br>
+   <p>
+   The <b>Classpath</b> property value is the <b>usercp</b> parameter defefined in the <a href="#ParameterSet">JavaIntegrationSamples</a> parameter set configured in previous step.<br>
+   In order to check if the parameter value is a valid classpath, click on <b>Select</b> helper button to list the user class included in the jar file specified in the <b>Classpath</b> property.
+   </p>
+   <img src="images/UserClass.PNG"><br>
+   <p>
+   <b>Resolve Job Parameter</b> dialog will be launched, and shows the default value for <b>usercp</b> parameter defined in <a href="#ParameterSet">JavaIntegrationSamples</a> Parameter Set.
+   If the default value does not need to be changed, click on "OK". If not, change the value and click on "OK".<br>
+   </p>
+   <img src="images/UserClassParameter.PNG"><br>
+   <p>
+   You should see the list of the user class included in the jar file, if the classpath value is configured correctly.<br>
+   Select <b>JavaPackTransformer</b>(it should be selected by default) and click on "OK",  or "Cancel".<br>
+   </p>
+   <img src="images/UserClassList.PNG"><br>
+
+</ol>
+
+<h2>Executing Sample Jobs</h2>
+
+<h3><a name="JavaPackTransformer">JavaPackTransformer</a></h3>
+   <p style="padding-left:2em">
+   <b>JavaPackTransformer</b> is a sample testcase to test JavaPack compatibility.<br>
+   The job has 1 input link and 2 output link (including 1 reject link).<br>
+   It reads a row having empno(Integer), firstname(VarChar), lastname(VarChar), hireDate(Date), 
+   edLevel(SmallInt), salary(Double), bonus(Double) and lastUpdate(Time) columns, converts the 
+   firstname and lastname value to uppercase. <br>
+   If firstname column of the input row contains the character '*', the row is rejected. <br>
+   </p>
+   <img  style="padding-left:2em" src="images/JavaPackTransformer.PNG"><br>
+
+   <p style="padding-left:2em">
+   Input data file (<i>data/employee.txt</i>) is read by Sequential File Stage and sent to input link of the JavaIntegration.
+   Java Integration stage transforms the input data and sends the data to output link and reject link.
+   </p>
+   <p style="padding-left:2em">
+   Parameter set should be configured successfully in previous step, so there is no additional steps required for this job.<br>
+   You can compile and execute the job.
+   </p>
+   <p style="padding-left:2em">
+   Job should be executed successfully without any warning messages.
+   </p>
+
+<h3><a name="Transformer">Transformer</a></h3>
+
+   <p style="padding-left:2em">
+   <b>Transformer</b> is a sample job for column-based transformer stage.<br>
+   The job has 1 input link, 1 output link and 1 reject link.
+   </p>
+   <p style="padding-left:2em">
+   It reads a row having empno(Integer), firstname(VarChar), lastname(VarChar), hireDate(Date), 
+   edLevel(SmallInt), salary(Double), bonus(Double) and lastUpdate(Time) columns, converts the firstname
+    and lastname value to uppercase.<br>
+   If firstname column of the input row contains the character '*', the row is rejected. 
+   In rejected records,"ERRORTEXT" and "ERRORCODE" fields are added to show the rejected reason.
+   </p>
+   <img style="padding-left:2em" src="images/Transformer.PNG"><br>
+   <p style="padding-left:2em">
+   Input data file (<i>data/employee.txt</i>) is read by Sequential File Stage and sent to input link of the JavaIntegration.
+   Java Integration stage transforms the input data and sends the data to output link and reject link.
+   </p>
+   <p style="padding-left:2em">
+   Parameter set should be configured successfully in previous step, so there is no additional steps required for this job.<br>
+   You can compile and execute the job.
+   </p>
+   <p style="padding-left:2em">
+   Job should be executed successfully without any warning messages.
+   </p>
+
+
+<h3><a name="JavaBeansTransformer">JavaBeansTransformer</a></h3>
+
+   <p style="padding-left:2em">
+   <b>JavaBeansTransformer</b> is a sample job for bean-based transformer stage.<br>
+   The job has 1 input link, 1 output link and 1 reject link.<br>
+   It reads a row having empno(Integer), firstname(VarChar), lastname(VarChar), hireDate(Date), 
+   edLevel(SmallInt), salary(Double), bonus(Double) and lastUpdate(Time) columns, converts the firstname
+    and lastname value to uppercase.<br>
+   If firstname column of the input row contains the character '*', the row is rejected. 
+   In rejected records,"ERRORTEXT" and "ERRORCODE" fields are added to show the rejected reason.<br>
+   </p>
+   <img style="padding-left:2em" src="images/JavaBeansTransformer.PNG"><br>
+   <p style="padding-left:2em">
+   Additional configurations are required if the Java code uses Java Bean to store the record.<br>
+   You will need to specify the mapping JavaBeans property name and DataStage Column name.
+   </p>
+   <ol type="1">
+      <li>Click on <b>Configure</b> button on stage editor.</li>
+      <img src="images/BeanConfigure.PNG"><br>
+
+   <b>Resolve Job Parameter</b> dialog will be launched, and shows the default value for <b>usercp</b> parameter defined in <a href="#ParameterSet">JavaIntegrationSamples</a> Parameter Set.
+   If the default value does not need to be changed, click on "OK". If not, change the value and click on "OK".<br>
+   </p>
+   <img src="images/UserClassParameter.PNG"><br>
+   <p>
+
+   <b>Column Mapping Editor</b> will be displayed to user since <code>Transformer</code> code uses Java Bean
+    (<code>InputBean</code> and <code>OutputBean</code>) to store the record data.<br>
+   <img src="images/BeanColumnMappingEditor.PNG"><br>
+
+   <li>Click on <b>Browse Objects</b> button on Column Mapping Editor.</li>
+   <img src="images/BeanBrowseObjectButton.PNG"><br>
+   <p>
+   <b>Import Java Beans Properties</b> dialog will be lauched.<br>
+   </p>
+   <img src="images/BeanImportProperties.PNG"><br>
+
+   <li>Select all the objects in the beans and click "OK".</li>
+   <img src="images/BeanImportPropertiesSelect.PNG"><br>
+   <p>
+   You can see the column mapping is defined.<br>
+   </p>
+   <img src="images/BeanInputLink.PNG"><br>
+   <p>
+   By clicking <b>Link</b> combo box, you can swich input link and output link column mapping panel.<br>
+   </p>
+   <img src="images/BeanOutputLink.PNG"><br>
+   <li>Click "Finish" button on Column Mapping Editor.</li>
+   <p>
+   Select the <b>Input</b> tab and select "InputLink(employee)" from the <b>Input name(upstream stage)</b> drop down list. Verify that the <b>Column Mapping</b> and <b>JavaBeans class</b> properties are now defined.<br>
+   </p>
+   <img src="images/BeanColumnMappingProperty.PNG"><br>
+</ol>
+   <p style="padding-left:2em">
+   You are now ready to compile and execute the job.
+   </p>
+   <p style="padding-left:2em">
+   Job should be executed successfully without any warning messages.
+   </p>
+
+<h3><a name="IntValueGenerator">IntValueGenerator</a></h3>
+
+   <p style="padding-left:2em">
+   <b>IntValueGenerator</b> is a sample job for column-based source stage. <br>
+   The job has 1 output link, and 1 Integer column defined in output link. It writes rows to an output link. <p>
+
+   <p style="padding-left:2em">
+   The number of rows to generate is specified as the user's custom stage property "NumOfRecords" value in the Java Integration stage and is fetched using the
+    <code>Configuration.getUserProperties()</code> method. 
+   Default value is 10.<br>
+   End-of-wave marker is written based on the user's custom output link property "WaveCount".
+   Based on the specified value, end-of-wave marker is written after specified number
+   of records. 
+   Default value is 5.
+   </p>
+   <p style="padding-left:2em">
+   Generated values for Integer columns are the incremented integer values starts from 0.
+   If the job is running on multi-node environment, generation is distributed across
+   player nodes in round-robin method.
+   For example, if job is running on 3 nodes and "NumOfRecords" is set to 10, records
+   are generated as follows:
+   <br>
+   <ul type="circle">
+      <li>node 0 - 0, 3, 6, 9</li>
+      <li>node 1 - 1, 4, 7</li>
+      <li>node 2 - 2, 5, 8</li>
+   </ul>
+   </p>
+
+   <img style="padding-left:2em" src="images/IntValueGenerator.PNG"><br>
+   <p style="padding-left:2em">
+   Additional configurations are required since this job requires Custom properties.<br>
+   </p>
+<ol type="1">
+      <li>Click on <b>Configure</b> button on stage editor.</li>
+      <img src="images/CustomPropertyConfigure.PNG"><br>
+
+   <b>Custom Property Editor</b> will be displayed to user since "IntValueGenerator.java" code uses custom properties.<br>
+   <ul type="disc">
+      <li>NumOfRecords: (Stage property) Total number of records to be generated.</li>
+      <li>WaveCount: (Output Link property) Number of records to be processed before writing end-of-wave marker.</li>
+   </ul>
+   <li>Click on <b>Property value</b> field of <b>Number of Records</b> property.</li>
+   <p>
+   Change the value to the number of records you want to generate, for example, 20.
+   </p>
+   <img src="images/NumOfRecords.PNG"><br>
+
+   <li>Change to the output link property by selecting "OutputLink(Link)" from <b>Scope</b> combo box.</li>
+   <img src="images/WaveCount.PNG"><br>
+
+   <li>Click on <b>Property value</b> field of <b>Wave Count</b> property.</li>
+   <p>
+   Change the value to the number of records you want to process before writing end-of-wave marker, for example, 10.
+   </p>
+   <li>Click "Finish".</li>
+   <p>
+   You will see <b>NumOfRecords</b> property in the <b>Custom property</b> field for Stage.<br>
+   </p>
+   <img src="images/StageCustomProperty.PNG"><br>
+   <p>
+   You will see <b>WaveCount</b> property in the <b>Custom property</b> field for Output Link.<br>
+   </p>
+   <img src="images/LinkCustomProperty.PNG"><br>
+</ol>
+
+   <p style="padding-left:2em">
+   You are now ready to compile and execute the job.
+   </p>
+   <p style="padding-left:2em">
+   Job should be executed successfully without any warning messages.
+   </p>
+
+<h3><a name="RCP">RCP</a></h3>
+
+   <p style="padding-left:2em">
+   <b>RCP</b> is a sample job for column-based transformer stage using Runtime Column Propagation (RCP). <br>
+   It reads a row having empno(Integer), firstname(VarChar), lastname(VarChar), hireDate(Date), edLevel(SmallInt),
+    salary(Double), bonus(Double) and lastUpdate(Time[microseconds])columns, converts the firstname and lastname
+     value to uppercase.<br>
+   <img src="images/RCP.PNG">
+   </p>
+
+   <p style="padding-left:2em">
+   There are only "firstname" and "lastname" columns defined in the output link (Runtime column propagation check box is checked). <br>
+   <img src="images/RCPColumnGrid.PNG">
+   </p>
+   <p style="padding-left:2em">
+   If RCP is on, all columns in input link will be propagated to output link. Columns other than "firstname" and and "lastname" is sent to output link without any changes. 
+   <br>
+   If RCP is off, only "firstname" and "lastname" will be sent to output link.
+   </p>
+   <p style="padding-left:2em">
+   Parameter set should be configured successfully in previous step, so there is no additional steps required for this job.<br>
+   You can compile and execute the job.<br>
+   </p>
+   <p style="padding-left:2em">
+   Job should be executed successfully without any warning messages.
+   </p>
+
+   <p style="padding-left:2em">
+   <i>Note:</i>
+   </p>
+   <p style="padding-left:2em">
+   If Runtime Column Propagation is disabled in your project, the <b>Runtime column propagation</b> check box is grayed out in RCP job.
+   It should be checked by default when importing this sample job.
+   <br>
+   If you want to enable <b>Runtime column propagation</b> check box, you can enable this function from Data Stage Administrator as follows:
+   <br>
+   Launch DataStage Administrator and login to your server. Click "Properties" button.<br>
+   <img src="images/AdminProperty.PNG"><br>
+   <b>Enable Runtime Column Propagation on Prallel Jobs</b> check box is unchecked by default.<br>
+   <img src="images/AdminRCPDefault.PNG"><br>
+   Check on <b>Enable Runtime Column Propagation on Prallel Jobs</b> check box.<br>
+   You can change default setting for new parallel jobs by the <b>Enable Runtime Column Propagation for new links</b> check box.<br>
+   <img src="images/AdminPropertyRCPOn.PNG"><br>
+   </p>
+
+<h3><a name="UDF">UserDefinedFunction</a></h3>
+
+   <p style="padding-left:2em">
+   <b>UserDefinedFunction</b> is a sample job to invoke User-Defined Function (UDF).<br>
+   The job has 2 input links and 1 output link.<br>
+   UDF has double and input bean arguments to return output bean.
+   </p>
+   <img style="padding-left:2em" src="images/UDF.PNG"><br>
+   <p style="padding-left:2em">
+   Additional configurations are required since User-Defined Function code uses Java Bean to store the record.<br>
+   You will need to specify the mapping JavaBeans property name and DataStage Column name.
+   </p>
+<ol type="1">
+   <li>Click on <b>Configure</b> button on stage editor.</li>
+   <img src="images/UDFConfigureButton.PNG"><br>
+   <p>
+   <b>Column Mapping Editor</b> will be displayed to user since <code>UserDefinedFunction</code> code uses Java Bean
+    (<code>InputBean</code> and <code>UDFOutputBean</code>) to store the record data.
+   </p>
+   <img src="images/UDFColumnMappingEditor.PNG"><br>
+
+   <li>Click on <b>Browse Objects</b> button on Column Mapping Editor.</li>
+   <img src="images/UDFBrowseObject.PNG"><br>
+   <b>Import Java Beans Properties</b> dialog will be lauched.<br>
+   <img src="images/UDFImportProperties.PNG"><br>
+
+   <li>Select all the objects in the beans and click "OK".</li>
+   <img src="images/UDFImportPropertiesSelect.PNG"><br>
+   <p>
+   You can see the column mapping is defined.
+   </p>
+   <img src="images/UDFInputLink.PNG"><br>
+   <p>
+   By clicking <b>Link</b> combo box, you can swich InputLink, InputLink2 and OutputLink column mapping panel.<br>
+   </p>
+   <img src="images/UDFInputLink2.PNG"><br>
+   <img src="images/UDFOutputLink.PNG"><br>
+
+   <li>Click "Finish" button on Column Mapping Editor.</li>
+   <p>
+   You can verify that the <b>Column Mapping</b> and <b>JavaBeans class</b> properties are now defined.<br>
+   </p>
+   OutputLink example:<br>
+   <img src="images/UDFColumnMappingProperty.PNG"><br>
+</ol>
+   <p style="padding-left:2em">
+   You are now ready to compile and execute the job.
+   </p>
+   <p style="padding-left:2em">
+   Job should be executed successfully without any warning messages.
+   </p>
+
+Last updated: 2012-04<BR>
+<!--
+<p><a href="http://publib.boulder.ibm.com/infocenter/iisinfsv/v8r1/topic/com.ibm.swg.im.iis.common.doc/common/terms_and_conditions.html" class="runningfooter"><strong>Terms and conditions</strong></a> </p>
+-->
+&copy;Copyright IBM Corporation 2011, 2012<BR>
+
+</body>
+</html>
+

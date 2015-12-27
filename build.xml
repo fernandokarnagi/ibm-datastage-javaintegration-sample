@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+//***************************************************************************
+// (c) Copyright IBM Corp. 2012 All rights reserved.
+// 
+// The following sample of source code ("build.xml") is owned by International 
+// Business Machines Corporation or one of its subsidiaries ("IBM") and is 
+// copyrighted and licensed, not sold. You may use, copy, modify, and 
+// distribute the Sample in any form without payment to IBM, for the purpose of 
+// assisting you in the development of your applications.
+// 
+// The Sample code is provided to you on an "AS IS" basis, without warranty of 
+// any kind. IBM HEREBY EXPRESSLY DISCLAIMS ALL WARRANTIES, EITHER EXPRESS OR 
+// IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. Some jurisdictions do 
+// not allow for the exclusion or limitation of implied warranties, so the above 
+// limitations or exclusions may not apply to you. IBM shall not be liable for 
+// any damages you suffer as a result of using, copying, modifying or 
+// distributing the Sample, even if IBM has been advised of the possibility of 
+// such damages.
+//*************************************************************************** -->
+<project name="Java Integration Stage Sample build file" default="build" basedir=".">
+
+   <property environment="env"/>
+   <property name="src"      value="${basedir}/src"/>
+   <property name="classes"  value="${basedir}/classes"/>
+   <property name="javadoc"  value="${basedir}/javadoc"/>
+   <property name="jars"     value="${basedir}/jars"/>
+   <property name="api.jar"  value="${basedir}/lib/ccjava-api.jar"/>
+   <property name="samples.jar" value="${jars}/Samples.jar"/>
+   <path id="build.classpath">
+      <pathelement location="${api.jar}"/>
+      <pathelement location="${classes}"/>
+   </path> 
+   <target name="build">
+      <mkdir dir="${jars}"/>
+      <mkdir dir="${classes}"/>
+      <mkdir dir="${javadoc}"/>
+      <javac srcdir="${src}"
+             source="1.6" target="1.6"
+             destdir="${classes}"
+             classpathref="build.classpath"
+             debug="true"
+             deprecation="true"
+             optimize="false">
+      </javac>
+      <jar jarfile="${samples.jar}">
+         <fileset dir="${classes}">
+            <include name="com/ibm/is/cc/javastage/samples/**/*.class"/>
+            <include name="com/ibm/is/cc/javastage/samples/bean/**/*.class"/>
+        </fileset>
+      </jar>
+      <javadoc sourcepath="${src}" packagenames="com.ibm.is.cc.javastage.samples" classpathref="build.classpath" destdir="${javadoc}" version="true" use="true" windowtitle="Java Integration Stage Sample Program Document"/>
+   </target> 
+
+   <target name="clean">
+      <delete quiet="true" dir="${classes}"/>
+      <delete quiet="true" dir="${jars}"/>
+      <delete quiet="true" dir="${javadoc}"/>
+   </target>
+</project>
